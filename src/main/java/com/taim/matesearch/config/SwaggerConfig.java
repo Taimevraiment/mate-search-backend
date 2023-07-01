@@ -39,8 +39,8 @@ public class SwaggerConfig {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("用户中心")
-                .description("用户中心接口文档")
+                .title("伙伴匹配平台")
+                .description("伙伴匹配接口文档")
                 .version("1.0")
                 .build();
     }

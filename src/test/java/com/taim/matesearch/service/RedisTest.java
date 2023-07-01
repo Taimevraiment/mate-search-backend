@@ -24,22 +24,23 @@ public class RedisTest {
     void test() {
         ValueOperations valueOperations = redisTemplate.opsForValue();
         // 增
-        valueOperations.set("yupiString", "dog");
-        valueOperations.set("yupiInt", 1);
-        valueOperations.set("yupiDouble", 2.0);
+        valueOperations.set("taimString", "dog");
+        valueOperations.set("taimInt", 1);
+        valueOperations.set("taimDouble", 2.0);
         User user = new User();
         user.setId(1L);
-        user.setUsername("yupi");
-        valueOperations.set("yupiUser", user);
+        user.setUsername("taim");
+        valueOperations.set("taimUser", user);
         // 查
-        Object yupi = valueOperations.get("yupiString");
-        Assertions.assertTrue("dog".equals((String) yupi));
-        yupi = valueOperations.get("yupiInt");
-        Assertions.assertTrue(1 == (Integer) yupi);
-        yupi = valueOperations.get("yupiDouble");
-        Assertions.assertTrue(2.0 == (Double) yupi);
-        System.out.println(valueOperations.get("yupiUser"));
-        valueOperations.set("yupiString", "dog");
-        redisTemplate.delete("yupiString");
+        Object taim = valueOperations.get("taimString");
+        Assertions.assertTrue("dog".equals((String) taim));
+        taim = valueOperations.get("taimInt");
+        Assertions.assertTrue(1 == (Integer) taim);
+        taim = valueOperations.get("taimDouble");
+        Assertions.assertTrue(2.0 == (Double) taim);
+        System.out.println(valueOperations.get("taimUser"));
+        valueOperations.set("taimString", "dog");
+        redisTemplate.delete("taimString");
     }
+
 }

@@ -56,6 +56,9 @@ public class TeamController {
         if (teamAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        if (teamAddRequest.getExpireTime() == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "过期时间为空");
+        }
         User loginUser = userService.getLoginUser(request);
         Team team = new Team();
         BeanUtils.copyProperties(teamAddRequest, team);
@@ -91,7 +94,7 @@ public class TeamController {
     @GetMapping("/list")
     public BaseResponse<List<TeamUserVO>> listTeams(TeamQuery teamQuery, HttpServletRequest request) {
         if (teamQuery == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
         boolean isAdmin = userService.isAdmin(request);
         // 1、查询队伍列表
