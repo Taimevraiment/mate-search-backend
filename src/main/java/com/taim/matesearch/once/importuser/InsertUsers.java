@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  *
  * @author taim
  */
-@Component
+//@Component
 public class InsertUsers {
 
     @Resource
@@ -29,14 +29,14 @@ public class InsertUsers {
         final int INSERT_NUM = 1000;
         for (int i = 0; i < INSERT_NUM; i++) {
             User user = new User();
-            user.setUsername("假鱼皮");
-            user.setUserAccount("fakeyupi");
+            user.setUsername("假用户");
+            user.setUserAccount("fakeuser");
             user.setAvatarUrl("https://636f-codenav-8grj8px727565176-1256524210.tcb.qcloud.la/img/logo.png");
             user.setGender(0);
             user.setUserPassword("12345678");
             user.setPhone("123");
             user.setEmail("123@qq.com");
-            user.setTags("[]");
+            user.setTags("[\"Java\"]");
             user.setUserStatus(0);
             user.setUserRole(0);
 //            user.setPlanetCode("11111111");

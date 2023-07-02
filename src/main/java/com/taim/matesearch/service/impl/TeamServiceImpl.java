@@ -2,20 +2,20 @@ package com.taim.matesearch.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.taim.matesearch.exception.BusinessException;
-import com.taim.matesearch.model.request.TeamUpdateRequest;
-import com.taim.matesearch.model.vo.TeamUserVO;
 import com.taim.matesearch.common.ErrorCode;
+import com.taim.matesearch.exception.BusinessException;
+import com.taim.matesearch.mapper.TeamMapper;
+import com.taim.matesearch.model.domain.Team;
 import com.taim.matesearch.model.domain.User;
 import com.taim.matesearch.model.domain.UserTeam;
 import com.taim.matesearch.model.dto.TeamQuery;
 import com.taim.matesearch.model.enums.TeamStatusEnum;
 import com.taim.matesearch.model.request.TeamJoinRequest;
 import com.taim.matesearch.model.request.TeamQuitRequest;
+import com.taim.matesearch.model.request.TeamUpdateRequest;
+import com.taim.matesearch.model.vo.TeamUserVO;
 import com.taim.matesearch.model.vo.UserVO;
 import com.taim.matesearch.service.TeamService;
-import com.taim.matesearch.model.domain.Team;
-import com.taim.matesearch.mapper.TeamMapper;
 import com.taim.matesearch.service.UserService;
 import com.taim.matesearch.service.UserTeamService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -194,6 +194,12 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 BeanUtils.copyProperties(user, userVO);
                 teamUserVO.setCreateUser(userVO);
             }
+            // 获取该队伍加入人数
+            int joinNum = (int) countTeamUserByTeamId(team.getId());
+            teamUserVO.setHasJoinNum(joinNum);
+            // 判断用户是否加入该队伍
+            boolean hasJoinTeam = hasJoinTeamByUserId(team.getId(), teamQuery.getCurrUserId());
+            teamUserVO.setHasJoin(hasJoinTeam);
             teamUserVOList.add(teamUserVO);
         }
         return teamUserVOList;
@@ -396,6 +402,26 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
         userTeamQueryWrapper.eq("teamId", teamId);
         return userTeamService.count(userTeamQueryWrapper);
+    }
+
+    /**
+     * 判断用户是否在队伍中
+     *
+     * @param teamId
+     * @param userId
+     * @return
+     */
+    private boolean hasJoinTeamByUserId(Long teamId, Long userId) {
+        if (teamId == null || userId == null) return false;
+        QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
+        try {
+            userTeamQueryWrapper.eq("userId", userId);
+            userTeamQueryWrapper.eq("teamId", teamId);
+            UserTeam userTeam = userTeamService.getOne(userTeamQueryWrapper);
+            return userTeam != null;
+        } catch (Exception e) {
+        }
+        return false;
     }
 }
 

@@ -19,8 +19,8 @@ public class AlgorithmUtils {
      * @return
      */
     public static int minDistance(List<String> tagList1, List<String> tagList2) {
-        int n = tagList1.size();
-        int m = tagList2.size();
+        int n = tagList1 == null ? 0 : tagList1.size();
+        int m = tagList2 == null ? 0 : tagList2.size();
 
         if (n * m == 0) {
             return n + m;

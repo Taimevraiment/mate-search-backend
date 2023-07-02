@@ -46,9 +46,14 @@ public class TeamQuery extends PageRequest {
     private Integer maxNum;
 
     /**
-     * 用户id
+     * 创建人用户id
      */
     private Long userId;
+
+    /**
+     * 当前用户id
+     */
+    private Long currUserId;
 
     /**
      * 0 - 公开，1 - 私有，2 - 加密
