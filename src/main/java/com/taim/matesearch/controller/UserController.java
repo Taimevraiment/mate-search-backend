@@ -32,7 +32,7 @@ import static com.taim.matesearch.constant.UserConstant.USER_LOGIN_STATE;
  */
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://matesearch.taim.site"}, allowCredentials = "true")
 @Slf4j
 public class UserController {
 
@@ -69,6 +69,7 @@ public class UserController {
             return ResultUtils.error(ErrorCode.NULL_ERROR, "用户名或密码不能为空");
         }
         User user = userService.userLogin(userAccount, userPassword, request);
+        log.info("login,{}", request.getSession().getId());
         return ResultUtils.success(user);
     }
 
@@ -83,6 +84,7 @@ public class UserController {
 
     @GetMapping("/current")
     public BaseResponse<User> getCurrentUser(HttpServletRequest request) {
+        log.info("current,{}", request.getSession().getId());
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User currentUser = (User) userObj;
         if (currentUser == null) {

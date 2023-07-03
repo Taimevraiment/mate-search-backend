@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/team")
-@CrossOrigin(origins = {"http://localhost:3000","http://matesearch.taim.site"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://matesearch.taim.site"}, allowCredentials = "true")
 @Slf4j
 public class TeamController {
 
