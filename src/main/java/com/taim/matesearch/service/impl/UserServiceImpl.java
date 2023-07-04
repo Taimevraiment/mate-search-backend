@@ -4,12 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.taim.matesearch.constant.UserConstant;
-import com.taim.matesearch.exception.BusinessException;
 import com.taim.matesearch.common.ErrorCode;
+import com.taim.matesearch.exception.BusinessException;
+import com.taim.matesearch.mapper.UserMapper;
 import com.taim.matesearch.model.domain.User;
 import com.taim.matesearch.service.UserService;
-import com.taim.matesearch.mapper.UserMapper;
 import com.taim.matesearch.utils.AlgorithmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +23,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static com.taim.matesearch.constant.UserConstant.ADMIN_ROLE;
+import static com.taim.matesearch.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * 用户服务实现类
@@ -130,7 +132,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 3. 用户脱敏
         User safetyUser = getSafetyUser(user);
         // 4. 记录用户的登录态
-        request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, safetyUser);
+        request.getSession().setAttribute(USER_LOGIN_STATE, safetyUser);
         return safetyUser;
     }
 
@@ -169,7 +171,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public int userLogout(HttpServletRequest request) {
         // 移除登录态
-        request.getSession().removeAttribute(UserConstant.USER_LOGIN_STATE);
+        request.getSession().removeAttribute(USER_LOGIN_STATE);
         return 1;
     }
 
@@ -227,7 +229,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (request == null) {
             return null;
         }
-        Object userObj = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         if (userObj == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
@@ -243,9 +245,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public boolean isAdmin(HttpServletRequest request) {
         // 仅管理员可查询
-        Object userObj = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User user = (User) userObj;
-        return user != null && user.getUserRole() == UserConstant.ADMIN_ROLE;
+        return user != null && user.getUserRole() == ADMIN_ROLE;
     }
 
     /**
@@ -256,7 +258,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public boolean isAdmin(User loginUser) {
-        return loginUser != null && loginUser.getUserRole() == UserConstant.ADMIN_ROLE;
+        return loginUser != null && loginUser.getUserRole() == ADMIN_ROLE;
     }
 
     @Override
