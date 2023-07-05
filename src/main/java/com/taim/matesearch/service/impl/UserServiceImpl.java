@@ -91,6 +91,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptPassword);
         user.setUsername(userAccount);
+        user.setAvatarUrl("http://matesearch.taim.site/default-avatar.jpg");
+        user.setGender(0);
 //        user.setPlanetCode(planetCode);
         boolean saveResult = this.save(user);
         if (!saveResult) {
