@@ -194,6 +194,7 @@ public class TeamController {
         }
         User loginUser = userService.getLoginUser(request);
         teamQuery.setUserId(loginUser.getId());
+        teamQuery.setStatus(new Integer[]{0, 1, 2});
         List<TeamUserVO> teamList = teamService.listTeams(teamQuery, true);
         return ResultUtils.success(teamList);
     }
@@ -231,6 +232,7 @@ public class TeamController {
         List<Long> idList = new ArrayList<>(listMap.keySet());
         teamQuery.setIdList(idList);
         teamQuery.setCurrUserId(loginUser.getId());
+        teamQuery.setStatus(new Integer[]{0, 1, 2});
         List<TeamUserVO> teamList = teamService.listTeams(teamQuery, true);
         return ResultUtils.success(teamList);
     }

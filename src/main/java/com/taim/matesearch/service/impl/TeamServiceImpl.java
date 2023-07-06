@@ -27,11 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * 队伍服务实现类
@@ -161,15 +159,14 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 queryWrapper.eq("userId", userId);
             }
             // 根据状态来查询
-            Integer status = teamQuery.getStatus();
-            TeamStatusEnum statusEnum = TeamStatusEnum.getEnumByValue(status);
-            if (statusEnum == null) {
-                statusEnum = TeamStatusEnum.PUBLIC;
-            }
-            if (!isAdmin && statusEnum.equals(TeamStatusEnum.PRIVATE)) {
+            List<Integer> status = Arrays.asList(Optional.ofNullable(teamQuery.getStatus()).orElse(new Integer[]{0}));
+            List<Integer> statusEnum = status.stream()
+                    .map(s -> TeamStatusEnum.getEnumByValue(s).getValue())
+                    .collect(Collectors.toList());
+            if (!isAdmin && statusEnum.contains(TeamStatusEnum.PRIVATE.getValue())) {
                 throw new BusinessException(ErrorCode.NO_AUTH);
             }
-            queryWrapper.eq("status", statusEnum.getValue());
+            queryWrapper.in("status", statusEnum);
         }
         // 不展示已过期的队伍
         // expireTime is null or expireTime > now()
